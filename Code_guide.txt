@@ -29,6 +29,7 @@ o Set for Project
 o Set for Project type with the same
 ===============================================
 
+====================Video #11==================
 create add table(JFrame Form) and button(in JInternal Form) then setActionPerform 
 -> set a form for add table -> connect with sql
 -> change variable for each field -> add button in add-table
@@ -52,3 +53,4 @@ finally{
 	catch(){
 	}	
 }
+===============================================

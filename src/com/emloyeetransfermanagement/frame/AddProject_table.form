@@ -208,12 +208,10 @@
     <Component class="javax.swing.JComboBox" name="projectType">
       <Properties>
         <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="5">
+          <StringArray count="3">
             <StringItem index="0" value="Select"/>
-            <StringItem index="1" value="SItem 1"/>
-            <StringItem index="2" value="Item 2"/>
-            <StringItem index="3" value="Item 3"/>
-            <StringItem index="4" value="Item 4"/>
+            <StringItem index="1" value="PJT001"/>
+            <StringItem index="2" value="PJT002"/>
           </StringArray>
         </Property>
       </Properties>
@@ -236,6 +234,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Finished"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbFinishedActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JRadioButton" name="rbUnfinished">
       <Properties>
@@ -244,6 +245,9 @@
         </Property>
         <Property name="text" type="java.lang.String" value="Unfinished"/>
       </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="rbUnfinishedActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JButton" name="buttonSaveProject">
       <Properties>

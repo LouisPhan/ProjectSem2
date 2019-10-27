@@ -49,7 +49,7 @@ public class HomeGUI extends javax.swing.JFrame {
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1170, Short.MAX_VALUE)
+            .addGap(0, 1470, Short.MAX_VALUE)
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -57,7 +57,7 @@ public class HomeGUI extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 1170, 40);
+        jPanel1.setBounds(0, 0, 1470, 40);
 
         jPanel2.setBackground(new java.awt.Color(0, 153, 204));
 
@@ -65,7 +65,7 @@ public class HomeGUI extends javax.swing.JFrame {
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1170, Short.MAX_VALUE)
+            .addGap(0, 1470, Short.MAX_VALUE)
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -73,7 +73,7 @@ public class HomeGUI extends javax.swing.JFrame {
         );
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 40, 1170, 20);
+        jPanel2.setBounds(0, 40, 1470, 20);
 
         buttonProject.setText("Project Management");
         buttonProject.addActionListener(new java.awt.event.ActionListener() {
@@ -99,17 +99,17 @@ public class HomeGUI extends javax.swing.JFrame {
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 910, Short.MAX_VALUE)
+            .addGap(0, 1220, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 540, Short.MAX_VALUE)
+            .addGap(0, 590, Short.MAX_VALUE)
         );
 
         getContentPane().add(desktop);
-        desktop.setBounds(220, 70, 910, 540);
+        desktop.setBounds(220, 70, 1220, 590);
 
-        setSize(new java.awt.Dimension(1164, 677));
+        setSize(new java.awt.Dimension(1475, 734));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 

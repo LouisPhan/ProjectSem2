@@ -10,6 +10,8 @@ import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.text.SimpleDateFormat;
+import java.util.Locale;
 import javax.swing.JOptionPane;
 
 /**
@@ -17,10 +19,11 @@ import javax.swing.JOptionPane;
  * @author MyPC
  */
 public class AddProject_table extends javax.swing.JFrame {
-Connection conn = null;
+    Connection conn = null;
     DBConnection connection = new DBConnection();
     PreparedStatement pst = null;
     ResultSet rs = null;
+    public String status;
     /**
      * Creates new form AddProject_table
      */
@@ -84,7 +87,7 @@ Connection conn = null;
             }
         });
 
-        projectType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "SItem 1", "Item 2", "Item 3", "Item 4" }));
+        projectType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "PJT001", "PJT002" }));
         projectType.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 projectTypeActionPerformed(evt);
@@ -95,9 +98,19 @@ Connection conn = null;
 
         StatusGroup.add(rbFinished);
         rbFinished.setText("Finished");
+        rbFinished.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbFinishedActionPerformed(evt);
+            }
+        });
 
         StatusGroup.add(rbUnfinished);
         rbUnfinished.setText("Unfinished");
+        rbUnfinished.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                rbUnfinishedActionPerformed(evt);
+            }
+        });
 
         buttonSaveProject.setText("Save");
         buttonSaveProject.addActionListener(new java.awt.event.ActionListener() {
@@ -215,16 +228,18 @@ Connection conn = null;
 
     private void buttonSaveProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveProjectActionPerformed
         // TODO add your handling code here:
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        
         try {
-        String query = "insert into Project(ProjectID, ProjectName, StartDate,EndDate,RoomName,Status,Coeffection, ProjecTypeID) values (?,?,?,?,?,?,?,?)";
+        String query = "insert into Project(ProjectID, ProjectName, StartDate, EndDate, RoomName, Status, Coefficient, ProjectTypeID) values (?,?,?,?,?,?,?,?)";
         pst = conn.prepareStatement(query);
         
         pst.setString(1, txtProjectID.getText());
         pst.setString(2, txtProjectName.getText());
-        pst.setDate(3, (Date) calendarSD.getDate());
-        pst.setDate(4, (Date) calendarED.getDate());
+        pst.setString(3, dateFormat.format(calendarSD.getDate()));
+        pst.setString(4, dateFormat.format(calendarED.getDate()));
         pst.setString(5, (String) roomName.getSelectedItem());
-        pst.setString(6, StatusGroup.getSelection().toString());
+        pst.setString(6,status);        
         pst.setString(7, txtCoeffection.getText());
         pst.setString(8, (String) projectType.getSelectedItem());
         
@@ -235,7 +250,7 @@ Connection conn = null;
         } finally{
             try {
                 pst.close();
-                rs.close();       
+                //rs.close();       
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
@@ -243,6 +258,14 @@ Connection conn = null;
         
        
     }//GEN-LAST:event_buttonSaveProjectActionPerformed
+
+    private void rbFinishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbFinishedActionPerformed
+        status = "Finished";
+    }//GEN-LAST:event_rbFinishedActionPerformed
+
+    private void rbUnfinishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbUnfinishedActionPerformed
+        status = "Unfinished";
+    }//GEN-LAST:event_rbUnfinishedActionPerformed
 
     /**
      * @param args the command line arguments
