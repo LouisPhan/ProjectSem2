@@ -1,0 +1,54 @@
+====================Video #9==================
+desktop pane -> change variable name 
+
+-> create internal class form for project 
+-> properties -> check off iconfiable, maximizable, closeable, resizeable -> set tittle -> set color background
+-> set action performed -> 
+// this.desk.add(?);
+// this.desk.removeAll;
+// this.desk.repaint;
+// ?.setMaxium(true);
+// ?.show();
+-> set no border
+
+
+-> create internal class form for project type
+-> same with project
+===============================================
+
+====================Video #10==================
+o Set for Project
+	set pane color and label -> add function remove_title_bar
+	->voi remove_title_bar(){
+		putClientProperty("Project.isPalette", Bollean.TRUE);
+		getRootPane().setNimbusDecorationStyle(JRootPane.NONE);
+		((BasicInteralFrameUI)this.getUI()).setNorthPane(null);
+		this.setBorder(null);
+	}
+	-> fix import -> add to ProjectManagement();
+o Set for Project type with the same
+===============================================
+
+create add table(JFrame Form) and button(in JInternal Form) then setActionPerform 
+-> set a form for add table -> connect with sql
+-> change variable for each field -> add button in add-table
+-> setButton action:
+
+string query = "insert into project_table () values (?,?,?,?,?,?,?)";
+pst = conn.prepareStatment(query);
+
+pst.setString(1, fieldName.getText() );
+* number in setString depen on how many ?.
+
+pst.excute();
+ -> show message saved  
+
+finally{
+
+	try{
+	pst.close();
+	rs.close();
+	}
+	catch(){
+	}	
+}
