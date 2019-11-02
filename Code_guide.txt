@@ -54,3 +54,38 @@ finally{
 	}	
 }
 ===============================================
+
+====================Video #12==================
+create table(Swing controls) and add rs2xml.jar to library
+-> change table variable name -> add conn -> public void showRecord()
+-> showRecord(){
+	String query = "select * from project";
+	pst = conn.prepareStatment(query);
+	rs = pst.executeQuery();
+	Tabel.setModel(DbUtils.resultSetTableModel(rs))
+
+}
+===============================================
+
+====================Video #14==================
+gom các label và field trong projectManagement thành một panel -> set Title Border cho panel đó
+-> tạo hàm có chức năng khi bấm vào bảng thông tin sẽ hiện thị bên kia -> tạo một static String test
+public void deplace(){
+	int row = Table.getSelectedRow();
+	this.test = (Tableg.getModel().getValueAt(row,0).toString());
+
+	String query = "select * from Project where ProjectID = '" +test+ "' ";
+
+	pst = conn.prepareStatement(query);
+	rs = pst.excuteQuery();
+
+	if(rs.next()){
+		String t1 = rs.getString("ProjectID");
+		txtProjectID.setText(t1);
+		-> set hết cho các trường
+	}
+}
+-> set event MouseClick trong table
+-> đặt hàm đã tạo phía trên 
+-> set foreground cho các field để dễ nhìn 
+===============================================
