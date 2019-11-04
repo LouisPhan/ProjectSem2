@@ -11,8 +11,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.util.Calendar;
 import java.util.Locale;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.ButtonModel;
 import javax.swing.JOptionPane;
+import net.proteanit.sql.DbUtils;
 
 /**
  *
@@ -30,8 +35,79 @@ public class AddProject_table extends javax.swing.JFrame {
     public AddProject_table() {
         initComponents();
         conn = connection.dbConncetor();
+        Recuper();
     }
-
+    
+    public void hideButton(){
+        ProjectManagement mark = new ProjectManagement();
+        String marked = mark.mark();
+        
+        if(marked == "update"){
+            buttonUpdate.setVisible(true);
+        }else{
+            buttonUpdate.setVisible(false);
+        }
+        
+        if(marked == "add"){
+            buttonSaveProject.setVisible(true);
+        }else{
+            buttonSaveProject.setVisible(false);
+        }
+    }
+    
+    public void Recuper(){
+        ProjectManagement modify = new ProjectManagement();
+        
+        
+        try {
+            String test2 = modify.getTableResult();
+            String query = "select * from Project where ProjectID = '"+test2+"'" ;
+            
+            pst = conn.prepareStatement(query);
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                String t1 = rs.getString("ProjectID");
+                txtProjectID.setText(t1);
+                String t2 = rs.getString("ProjectName");
+                txtProjectName.setText(t2);
+                Date t3 = rs.getDate("StartDate");
+                calendarSD.setDate(t3);
+                Date t4 = rs.getDate("EndDate");
+                calendarED.setDate(t4);
+                String t5 = rs.getString("RoomName");
+                roomName.setSelectedItem(t5);
+                String t6 = rs.getString("Coefficient");
+                txtCoeffection.setText(t6);
+                String t7 = rs.getString("Status");
+                String vbn = t7;
+                if(vbn.equals("Finished")){
+                    rbFinished.setSelected(true);
+                    status = "Finished";
+                }
+                else if(vbn.equals("Unfinished")){
+                    rbUnfinished.setSelected(true);
+                    status = "Unfinished";
+                }
+                
+                String t8 = rs.getString("ProjectTypeID");
+                projectType.setSelectedItem(t8);
+            }
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        } 
+    }
+    
+    public void cleardata(){
+        txtProjectID.setText("");
+        txtProjectName.setText("");
+        calendarSD.setCalendar(Calendar.getInstance(Locale.getDefault()));
+        calendarED.setCalendar(Calendar.getInstance(Locale.getDefault()));
+        roomName.setSelectedIndex(0);
+        txtCoeffection.setText("");
+        projectType.setSelectedIndex(0);
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -61,10 +137,16 @@ public class AddProject_table extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         calendarSD = new com.toedter.calendar.JDateChooser();
         calendarED = new com.toedter.calendar.JDateChooser();
+        buttonUpdate = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setTitle("Add information of project");
         setLocationByPlatform(true);
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
 
         jLabel1.setText("Projec ID:");
 
@@ -123,6 +205,13 @@ public class AddProject_table extends javax.swing.JFrame {
         jLabel9.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel9.setText("Information of project");
 
+        buttonUpdate.setText("Update");
+        buttonUpdate.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonUpdateActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -155,7 +244,10 @@ public class AddProject_table extends javax.swing.JFrame {
                                 .addGap(44, 44, 44)
                                 .addComponent(rbUnfinished))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addComponent(buttonSaveProject, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createSequentialGroup()
+                                    .addComponent(buttonUpdate)
+                                    .addGap(18, 18, 18)
+                                    .addComponent(buttonSaveProject, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE))
                                 .addComponent(txtCoeffection, javax.swing.GroupLayout.PREFERRED_SIZE, 466, javax.swing.GroupLayout.PREFERRED_SIZE))))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(188, 188, 188)
@@ -210,8 +302,10 @@ public class AddProject_table extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
                     .addComponent(projectType, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 20, Short.MAX_VALUE)
-                .addComponent(buttonSaveProject, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 20, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(buttonUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonSaveProject, javax.swing.GroupLayout.DEFAULT_SIZE, 38, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -228,6 +322,7 @@ public class AddProject_table extends javax.swing.JFrame {
 
     private void buttonSaveProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveProjectActionPerformed
         // TODO add your handling code here:
+        ProjectManagement show = new ProjectManagement();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         
         try {
@@ -239,7 +334,7 @@ public class AddProject_table extends javax.swing.JFrame {
         pst.setString(3, dateFormat.format(calendarSD.getDate()));
         pst.setString(4, dateFormat.format(calendarED.getDate()));
         pst.setString(5, (String) roomName.getSelectedItem());
-        pst.setString(6,status);        
+        pst.setString(6, status);        
         pst.setString(7, txtCoeffection.getText());
         pst.setString(8, (String) projectType.getSelectedItem());
         
@@ -255,8 +350,9 @@ public class AddProject_table extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
-        
-       
+      show.showRecord();
+      dispose();
+      
     }//GEN-LAST:event_buttonSaveProjectActionPerformed
 
     private void rbFinishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbFinishedActionPerformed
@@ -266,6 +362,33 @@ public class AddProject_table extends javax.swing.JFrame {
     private void rbUnfinishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbUnfinishedActionPerformed
         status = "Unfinished";
     }//GEN-LAST:event_rbUnfinishedActionPerformed
+
+    private void buttonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUpdateActionPerformed
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        String t1 = txtProjectID.getText();
+        String t2 = txtProjectName.getText();
+        String t3 = dateFormat.format(calendarSD.getDate());
+        String t4 = dateFormat.format(calendarED.getDate());
+        String t5 = (String) roomName.getSelectedItem();
+        String t6 = txtCoeffection.getText();
+//        String t7 = StatusGroup.getSelection().toString();
+        String t8 = (String) projectType.getSelectedItem();
+        
+        String query = "update Project set ProjectName = '"+t2+"', StartDate = '"+t3+"', EndDate = '"+t4+"', RoomName = '"+t5+"', Status = '"+status+"', Coefficient = '"+t6+"', ProjectTypeID = '"+t8+"' where ProjectID = '"+t1+"' ";
+        try {
+        pst = conn.prepareStatement(query);
+        pst.execute();    
+        JOptionPane.showMessageDialog(null, "Updated");
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+    }//GEN-LAST:event_buttonUpdateActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+        hideButton();
+    }//GEN-LAST:event_formWindowOpened
 
     /**
      * @param args the command line arguments
@@ -305,6 +428,7 @@ public class AddProject_table extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.ButtonGroup StatusGroup;
     private javax.swing.JButton buttonSaveProject;
+    private javax.swing.JButton buttonUpdate;
     private com.toedter.calendar.JDateChooser calendarED;
     private com.toedter.calendar.JDateChooser calendarSD;
     private javax.swing.JLabel jLabel1;

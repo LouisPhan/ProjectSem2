@@ -23,7 +23,7 @@ public class DBConnection {
             String password = "phanquanglam1002";
             conn = DriverManager.getConnection(url,user,password);
             if(conn != null){
-                JOptionPane.showMessageDialog(null, "Opening connection");
+                System.out.println("Openning connection");
             }
             return conn;
         } catch (Exception e) {

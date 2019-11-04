@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
 import net.proteanit.sql.DbUtils;
@@ -29,6 +30,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     PreparedStatement pst = null;
     ResultSet rs = null;
     static String test;
+    static String mark;
     
     public ProjectManagement() {
         conn = connection.dbConncetor();
@@ -44,6 +46,10 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         this.setBorder(null);
     }
     
+    public String mark(){
+        return mark;
+    }
+    
     public void showRecord(){
         String query = "select * from project";
         try {
@@ -55,10 +61,23 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         }
     }
     
+    public void clear(){
+        txtProjectID.setText("");
+        txtProjectName.setText("");
+        txtStartDate.setText("");
+        txtEndDate.setText("");
+        txtRoomName.setText("");
+        txtStatus.setText("");
+        txtProjectTypeID.setText("");
+        txtCoefficient.setText("");  
+    }
+    
+    
+    
     public void deplace(){
         try {
             int row = tableProject.getSelectedRow();
-            this.test = (tableProject.getModel().getValueAt(row, 0).toString());
+            ProjectManagement.test =(tableProject.getModel().getValueAt(row, 0).toString());
             
             String query = "select * from Project where ProjectID ='"+test+"'";
             pst = conn.prepareStatement(query);
@@ -86,6 +105,9 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
             Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+    public String getTableResult(){
+        return test;
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -103,26 +125,45 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         tableProject = new javax.swing.JTable();
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
-        txtStartDate = new javax.swing.JTextField();
         jLabel1 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
-        txtProjectName = new javax.swing.JTextField();
-        txtProjectID = new javax.swing.JTextField();
         jLabel8 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        txtRoomName = new javax.swing.JTextField();
-        txtCoefficient = new javax.swing.JTextField();
-        txtEndDate = new javax.swing.JTextField();
-        txtProjectTypeID = new javax.swing.JTextField();
-        txtStatus = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
+        txtProjectID = new javax.swing.JLabel();
+        txtProjectName = new javax.swing.JLabel();
+        txtStartDate = new javax.swing.JLabel();
+        txtEndDate = new javax.swing.JLabel();
+        txtRoomName = new javax.swing.JLabel();
+        txtStatus = new javax.swing.JLabel();
+        txtCoefficient = new javax.swing.JLabel();
+        txtProjectTypeID = new javax.swing.JLabel();
+        buttonDelete = new javax.swing.JButton();
+        buttonModify = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(null);
         setTitle("Project Management");
+        addInternalFrameListener(new javax.swing.event.InternalFrameListener() {
+            public void internalFrameActivated(javax.swing.event.InternalFrameEvent evt) {
+                formInternalFrameActivated(evt);
+            }
+            public void internalFrameClosed(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameClosing(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeactivated(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameDeiconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameIconified(javax.swing.event.InternalFrameEvent evt) {
+            }
+            public void internalFrameOpened(javax.swing.event.InternalFrameEvent evt) {
+            }
+        });
 
         jPanel1.setBackground(new java.awt.Color(0, 153, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
@@ -170,6 +211,9 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 tableProjectMouseClicked(evt);
             }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                tableProjectMouseReleased(evt);
+            }
         });
         jScrollPane1.setViewportView(tableProject);
 
@@ -177,42 +221,43 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Project's information"));
         jPanel2.setForeground(new java.awt.Color(0, 102, 204));
 
-        txtStartDate.setForeground(new java.awt.Color(0, 51, 204));
-
         jLabel1.setText("Project ID:");
 
         jLabel3.setText("Project Name:");
 
         jLabel10.setText("Project Type ID: ");
 
-        txtProjectName.setForeground(new java.awt.Color(0, 51, 204));
-
-        txtProjectID.setForeground(new java.awt.Color(0, 51, 204));
-
         jLabel8.setText("Status:");
 
         jLabel4.setText("Start Date:");
-
-        txtRoomName.setForeground(new java.awt.Color(0, 51, 204));
-
-        txtCoefficient.setForeground(new java.awt.Color(0, 51, 204));
-
-        txtEndDate.setForeground(new java.awt.Color(0, 51, 204));
-
-        txtProjectTypeID.setForeground(new java.awt.Color(0, 51, 204));
-        txtProjectTypeID.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                txtProjectTypeIDActionPerformed(evt);
-            }
-        });
-
-        txtStatus.setForeground(new java.awt.Color(0, 51, 204));
 
         jLabel5.setText("End Date:");
 
         jLabel9.setText("Coefficient:");
 
         jLabel7.setText("Room Name:");
+
+        txtProjectID.setForeground(new java.awt.Color(0, 102, 204));
+
+        txtProjectName.setForeground(new java.awt.Color(0, 102, 204));
+        txtProjectName.setMaximumSize(new java.awt.Dimension(7, 16));
+        txtProjectName.setMinimumSize(new java.awt.Dimension(7, 16));
+
+        txtStartDate.setForeground(new java.awt.Color(0, 102, 204));
+        txtStartDate.setMaximumSize(new java.awt.Dimension(7, 16));
+        txtStartDate.setMinimumSize(new java.awt.Dimension(7, 16));
+
+        txtEndDate.setForeground(new java.awt.Color(0, 102, 204));
+
+        txtRoomName.setForeground(new java.awt.Color(0, 102, 204));
+        txtRoomName.setMaximumSize(new java.awt.Dimension(7, 16));
+        txtRoomName.setMinimumSize(new java.awt.Dimension(7, 16));
+
+        txtStatus.setForeground(new java.awt.Color(0, 102, 204));
+
+        txtCoefficient.setForeground(new java.awt.Color(0, 102, 204));
+
+        txtProjectTypeID.setForeground(new java.awt.Color(0, 102, 204));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -222,23 +267,25 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel10)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel8)
                     .addComponent(jLabel7)
                     .addComponent(jLabel5)
+                    .addComponent(jLabel8)
+                    .addComponent(jLabel1)
                     .addComponent(jLabel4)
                     .addComponent(jLabel3)
-                    .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtProjectID)
-                    .addComponent(txtProjectName)
-                    .addComponent(txtStartDate)
-                    .addComponent(txtProjectTypeID)
-                    .addComponent(txtCoefficient)
-                    .addComponent(txtStatus)
-                    .addComponent(txtRoomName)
-                    .addComponent(txtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 298, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel9))
+                .addGap(14, 14, 14)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(txtProjectTypeID, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                        .addGap(14, 14, 14))
+                    .addComponent(txtCoefficient, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtRoomName, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtEndDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtProjectID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtProjectName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtStartDate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -246,38 +293,54 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtProjectID, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtProjectID, javax.swing.GroupLayout.PREFERRED_SIZE, 21, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtProjectName, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel3))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(txtStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jLabel4))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                .addGap(25, 25, 25)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel3)
+                    .addComponent(txtProjectName, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel4)
+                    .addComponent(txtStartDate, javax.swing.GroupLayout.PREFERRED_SIZE, 13, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(38, 38, 38)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel5)
-                    .addComponent(txtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel7)
-                    .addComponent(txtRoomName, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel8)
-                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel9)
-                    .addComponent(txtCoefficient, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(18, 18, 18)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(txtProjectTypeID, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(48, Short.MAX_VALUE))
+                    .addComponent(txtEndDate, javax.swing.GroupLayout.PREFERRED_SIZE, 16, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(43, 43, 43)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtRoomName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(38, 38, 38)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel8)
+                        .addGap(0, 0, Short.MAX_VALUE))
+                    .addComponent(txtStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(26, 26, 26)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtCoefficient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(36, 36, 36)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(txtProjectTypeID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap())
         );
+
+        buttonDelete.setText("Delete");
+        buttonDelete.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonDeleteActionPerformed(evt);
+            }
+        });
+
+        buttonModify.setText("Modify");
+        buttonModify.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonModifyActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -287,11 +350,17 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 863, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(27, 27, 27)
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 442, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(buttonModify, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 863, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
                 .addComponent(jLabel6)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -300,18 +369,18 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(248, 248, 248)
-                                .addComponent(jLabel6))
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                        .addGroup(layout.createSequentialGroup()
+                            .addGap(248, 248, 248)
+                            .addComponent(jLabel6))
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+                    .addComponent(buttonDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonModify, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
@@ -319,21 +388,62 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
+        this.mark = "add";
         AddProject_table addTable = new AddProject_table();
         addTable.setVisible(true);
+        addTable.cleardata();
     }//GEN-LAST:event_jButton1ActionPerformed
-
-    private void txtProjectTypeIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProjectTypeIDActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_txtProjectTypeIDActionPerformed
 
     private void tableProjectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProjectMouseClicked
         deplace();
     }//GEN-LAST:event_tableProjectMouseClicked
 
+    private void buttonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteActionPerformed
+        if(JOptionPane.showConfirmDialog(null, "Do you want to delete this, it can not be recovered?","",JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION){
+        if(txtProjectID.getText().length() != 0){
+        
+        try {
+            String query = "delete from project where ProjectID = ?";
+            
+            pst = conn.prepareStatement(query);
+            pst.setString(1, txtProjectID.getText());
+            pst.execute();
+            
+            JOptionPane.showMessageDialog(null, "Deleted");
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        }else{
+            JOptionPane.showMessageDialog(null, "Delete failed");
+            
+        }}
+        showRecord();
+        clear();
+        buttonDelete.setEnabled(false);
+    }//GEN-LAST:event_buttonDeleteActionPerformed
+
+    private void tableProjectMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProjectMouseReleased
+        buttonDelete.setEnabled(true);
+        buttonModify.setEnabled(true);
+    }//GEN-LAST:event_tableProjectMouseReleased
+
+    private void formInternalFrameActivated(javax.swing.event.InternalFrameEvent evt) {//GEN-FIRST:event_formInternalFrameActivated
+        buttonDelete.setEnabled(false);
+        buttonModify.setEnabled(false);
+    }//GEN-LAST:event_formInternalFrameActivated
+
+    private void buttonModifyActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonModifyActionPerformed
+        this.mark = "update";
+        AddProject_table modifyTable = new AddProject_table();
+        modifyTable.setVisible(true);
+        buttonModify.setEnabled(false);
+    }//GEN-LAST:event_buttonModifyActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton buttonDelete;
+    private javax.swing.JButton buttonModify;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -350,13 +460,13 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableProject;
-    private javax.swing.JTextField txtCoefficient;
-    private javax.swing.JTextField txtEndDate;
-    private javax.swing.JTextField txtProjectID;
-    private javax.swing.JTextField txtProjectName;
-    private javax.swing.JTextField txtProjectTypeID;
-    private javax.swing.JTextField txtRoomName;
-    private javax.swing.JTextField txtStartDate;
-    private javax.swing.JTextField txtStatus;
+    private javax.swing.JLabel txtCoefficient;
+    private javax.swing.JLabel txtEndDate;
+    private javax.swing.JLabel txtProjectID;
+    private javax.swing.JLabel txtProjectName;
+    private javax.swing.JLabel txtProjectTypeID;
+    private javax.swing.JLabel txtRoomName;
+    private javax.swing.JLabel txtStartDate;
+    private javax.swing.JLabel txtStatus;
     // End of variables declaration//GEN-END:variables
 }
