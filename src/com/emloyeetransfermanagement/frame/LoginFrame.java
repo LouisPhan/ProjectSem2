@@ -60,7 +60,7 @@ public class LoginFrame extends javax.swing.JFrame {
         setResizable(false);
         getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        jPanel1.setBackground(new java.awt.Color(0, 51, 204));
+        jPanel1.setBackground(new java.awt.Color(0, 153, 204));
         jPanel1.setForeground(new java.awt.Color(255, 255, 255));
 
         jLabel1.setFont(new java.awt.Font("Calibri", 0, 24)); // NOI18N
@@ -99,7 +99,7 @@ public class LoginFrame extends javax.swing.JFrame {
         getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(0, 0, -1, -1));
 
         jLabel3.setFont(new java.awt.Font("Calibri", 0, 48)); // NOI18N
-        jLabel3.setForeground(new java.awt.Color(0, 0, 204));
+        jLabel3.setForeground(new java.awt.Color(0, 153, 153));
         jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         jLabel3.setText("LOGIN");
         getContentPane().add(jLabel3, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 60, 180, 110));
@@ -132,7 +132,7 @@ public class LoginFrame extends javax.swing.JFrame {
         });
         getContentPane().add(passwordField, new org.netbeans.lib.awtextra.AbsoluteConstraints(420, 320, 300, 50));
 
-        loginButton.setBackground(new java.awt.Color(0, 51, 204));
+        loginButton.setBackground(new java.awt.Color(0, 102, 153));
         loginButton.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
         loginButton.setForeground(new java.awt.Color(255, 255, 255));
         loginButton.setText("Login");
@@ -179,6 +179,8 @@ public class LoginFrame extends javax.swing.JFrame {
         String password = passwordField.getText();
         String option = roleField.getSelectedItem().toString();
         
+  
+        
         if(username.equals("") || password.equals("") || option.equals("Select")){
             JOptionPane.showMessageDialog(null, "Some fields are empty!");
         }
@@ -198,7 +200,11 @@ public class LoginFrame extends javax.swing.JFrame {
                     if(role.equalsIgnoreCase("admin") && option.equalsIgnoreCase("Admin")){
                         JOptionPane.showMessageDialog(null, "Login successful");
                         dispose();
-                        new HomeGUI().setVisible(true);
+                        HomeGUI home = new HomeGUI();
+                        home.setVisible(true);
+                        home.getUsername(username);
+                        viewProfile view = new viewProfile();
+                        view.getUsername(username);
                     }
                     //User access
                     else if(option.equalsIgnoreCase("Employee") && role.equalsIgnoreCase("employee")){
@@ -250,7 +256,7 @@ public class LoginFrame extends javax.swing.JFrame {
          */
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
+                if ("Windows".equals(info.getName())) {
                     javax.swing.UIManager.setLookAndFeel(info.getClassName());
                     break;
                 }

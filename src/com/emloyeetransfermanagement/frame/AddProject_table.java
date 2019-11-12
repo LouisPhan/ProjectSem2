@@ -5,6 +5,8 @@
  */
 package com.emloyeetransfermanagement.frame;
 
+import java.awt.HeadlessException;
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
@@ -15,9 +17,8 @@ import java.util.Calendar;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.ButtonModel;
 import javax.swing.JOptionPane;
-import net.proteanit.sql.DbUtils;
+import static javax.swing.UIManager.getString;
 
 /**
  *
@@ -52,6 +53,24 @@ public class AddProject_table extends javax.swing.JFrame {
             buttonSaveProject.setVisible(true);
         }else{
             buttonSaveProject.setVisible(false);
+        }
+    }
+    
+    public void autoID(){
+        try {
+            String query = "select TOP 1 ProjectID from Project order by ProjectID desc";
+            
+            pst = conn.prepareStatement(query);
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                int t1 = rs.getInt("ProjectID");
+                int id = t1 + 1;
+                txtProjectID.setText(String.valueOf(id));
+            }
+                    
+            } catch (SQLException ex) {
+            Logger.getLogger(AddProject_table.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
     
@@ -100,10 +119,10 @@ public class AddProject_table extends javax.swing.JFrame {
     }
     
     public void cleardata(){
-        txtProjectID.setText("");
+       // txtProjectID.setText("");
         txtProjectName.setText("");
         calendarSD.setCalendar(Calendar.getInstance(Locale.getDefault()));
-        calendarED.setCalendar(Calendar.getInstance(Locale.getDefault()));
+        calendarED.setDate(null);
         roomName.setSelectedIndex(0);
         txtCoeffection.setText("");
         projectType.setSelectedIndex(0);
@@ -161,6 +180,19 @@ public class AddProject_table extends javax.swing.JFrame {
         jLabel6.setText("Coeffection:");
 
         jLabel7.setText("Type of Project:");
+
+        txtProjectID.setEnabled(false);
+        txtProjectID.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtProjectIDActionPerformed(evt);
+            }
+        });
+
+        txtCoeffection.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyTyped(java.awt.event.KeyEvent evt) {
+                txtCoeffectionKeyTyped(evt);
+            }
+        });
 
         roomName.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "101", "102", "103", "104", "105" }));
         roomName.addActionListener(new java.awt.event.ActionListener() {
@@ -321,9 +353,19 @@ public class AddProject_table extends javax.swing.JFrame {
     }//GEN-LAST:event_projectTypeActionPerformed
 
     private void buttonSaveProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveProjectActionPerformed
-        // TODO add your handling code here:
+        // TODO add your handling code here
+        
         ProjectManagement show = new ProjectManagement();
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+        
+        try {
+            if(txtProjectName.getText().equalsIgnoreCase("") || txtCoeffection.getText().equalsIgnoreCase("") || StatusGroup.isSelected(null) || roomName.getSelectedItem().equals("Select") || projectType.getSelectedItem().equals("Select")){
+                JOptionPane.showMessageDialog(null, "Some fields are empty or not selcted");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
         
         try {
         String query = "insert into Project(ProjectID, ProjectName, StartDate, EndDate, RoomName, Status, Coefficient, ProjectTypeID) values (?,?,?,?,?,?,?,?)";
@@ -340,18 +382,20 @@ public class AddProject_table extends javax.swing.JFrame {
         
         pst.execute();
         JOptionPane.showMessageDialog(null, "Saved");
+
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         } finally{
             try {
                 pst.close();
-                //rs.close();       
+                //rs.close();     
+                dispose();
             } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
       show.showRecord();
-      dispose();
+      
       
     }//GEN-LAST:event_buttonSaveProjectActionPerformed
 
@@ -379,8 +423,15 @@ public class AddProject_table extends javax.swing.JFrame {
         pst = conn.prepareStatement(query);
         pst.execute();    
         JOptionPane.showMessageDialog(null, "Updated");
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             System.out.println(e);
+        }finally{
+            try {
+                pst.close();
+                dispose();
+            } catch (Exception e) {
+                JOptionPane.showMessageDialog(null, e);
+            }
         }
         
         
@@ -389,6 +440,18 @@ public class AddProject_table extends javax.swing.JFrame {
     private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
         hideButton();
     }//GEN-LAST:event_formWindowOpened
+
+    private void txtProjectIDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtProjectIDActionPerformed
+        autoID();
+    }//GEN-LAST:event_txtProjectIDActionPerformed
+
+    private void txtCoeffectionKeyTyped(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtCoeffectionKeyTyped
+        char c = evt.getKeyChar();
+        if(Character.isLetter(c) && !evt.isAltDown()){
+            evt.consume();
+        }
+        
+    }//GEN-LAST:event_txtCoeffectionKeyTyped
 
     /**
      * @param args the command line arguments

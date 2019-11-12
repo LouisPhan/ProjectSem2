@@ -5,7 +5,10 @@
  */
 package com.emloyeetransfermanagement.frame;
 
+import java.awt.Color;
 import java.beans.PropertyVetoException;
+import java.util.Calendar;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
@@ -22,7 +25,59 @@ public class HomeGUI extends javax.swing.JFrame {
     public HomeGUI() {
         initComponents();
         this.setIconImage(new ImageIcon(getClass().getResource("heading_icon2.png")).getImage());
+        dateCurrent();
     }
+    
+    public void getUsername(String user){
+        username.setText(user);
+    }
+    
+    public String userName(){
+        return username.getText();
+    }
+    
+    
+    
+    public void dateCurrent(){
+        Thread watch = new Thread(){
+            public void run(){
+                for(;;){
+                    Calendar cal = new GregorianCalendar();
+                    
+                    int seconds = cal.get(Calendar.SECOND);
+                    int minutes = cal.get(Calendar.MINUTE);
+                    int hours = cal.get(Calendar.HOUR);
+                    int AM_PM = cal.get(Calendar.AM_PM);
+                    
+                    String time;
+                    if(AM_PM == 1){
+                        time = "PM";
+                    }else{
+                        time = "AM";
+                    }
+                    
+                    TimeLabel.setText(hours + ":" + minutes + ":" + seconds + " " + time);
+                    
+                    int day = cal.get(Calendar.DAY_OF_MONTH);
+                    int month = cal.get(Calendar.MONTH);
+                    int year = cal.get(Calendar.YEAR);
+                    
+                    DateLabel.setText(day + "/" + month + "/" + year);
+                    
+                    
+                    try{
+                        sleep(1000);
+                    }
+                    catch(InterruptedException ex){
+                        Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE,null,ex);
+                    }
+                }
+            }
+        };
+        watch.start();
+        
+        }
+    
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -34,46 +89,137 @@ public class HomeGUI extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        DateLabel = new javax.swing.JLabel();
+        jLabel6 = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        username = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
+        TimeLabel = new javax.swing.JLabel();
+        labelHome = new javax.swing.JLabel();
+        labelAbout = new javax.swing.JLabel();
         buttonProject = new javax.swing.JButton();
         buttonProjectType = new javax.swing.JButton();
         desktop = new javax.swing.JDesktopPane();
+        desktopHomeImg = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1024, 380));
+        addWindowListener(new java.awt.event.WindowAdapter() {
+            public void windowOpened(java.awt.event.WindowEvent evt) {
+                formWindowOpened(evt);
+            }
+        });
         getContentPane().setLayout(null);
 
         jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+
+        DateLabel.setFont(new java.awt.Font("Tahoma", 2, 18)); // NOI18N
+        DateLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        jLabel6.setIcon(new javax.swing.ImageIcon(getClass().getResource("/com/emloyeetransfermanagement/frame/heading_icon.png"))); // NOI18N
+
+        jLabel1.setText("Wellcome");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1640, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jLabel6)
+                .addGap(571, 571, 571)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 68, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(username, javax.swing.GroupLayout.PREFERRED_SIZE, 118, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 609, Short.MAX_VALUE)
+                .addComponent(DateLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 40, Short.MAX_VALUE)
+            .addComponent(DateLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addComponent(jLabel6)
+                .addGap(0, 0, Short.MAX_VALUE))
+            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(username, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel1);
-        jPanel1.setBounds(0, 0, 1640, 40);
+        jPanel1.setBounds(0, 0, 1640, 50);
 
         jPanel2.setBackground(new java.awt.Color(0, 153, 204));
+
+        TimeLabel.setFont(new java.awt.Font("Tahoma", 3, 14)); // NOI18N
+        TimeLabel.setForeground(new java.awt.Color(255, 255, 255));
+        TimeLabel.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+        labelHome.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        labelHome.setForeground(new java.awt.Color(255, 255, 255));
+        labelHome.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelHome.setText("Home");
+        labelHome.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelHomeMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                labelHomeMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                labelHomeMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                labelHomeMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                labelHomeMouseReleased(evt);
+            }
+        });
+
+        labelAbout.setFont(new java.awt.Font("Calibri", 0, 18)); // NOI18N
+        labelAbout.setForeground(new java.awt.Color(255, 255, 255));
+        labelAbout.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        labelAbout.setText("About");
+        labelAbout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                labelAboutMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                labelAboutMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                labelAboutMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                labelAboutMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                labelAboutMouseReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1640, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(labelHome, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(labelAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1309, Short.MAX_VALUE)
+                .addComponent(TimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(33, 33, 33))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 20, Short.MAX_VALUE)
+            .addComponent(TimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+            .addComponent(labelAbout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labelHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel2);
-        jPanel2.setBounds(0, 40, 1640, 20);
+        jPanel2.setBounds(0, 50, 1640, 40);
 
         buttonProject.setText("Project Management");
         buttonProject.addActionListener(new java.awt.event.ActionListener() {
@@ -82,7 +228,7 @@ public class HomeGUI extends javax.swing.JFrame {
             }
         });
         getContentPane().add(buttonProject);
-        buttonProject.setBounds(10, 70, 190, 50);
+        buttonProject.setBounds(10, 110, 190, 50);
 
         buttonProjectType.setText("Project Type Management");
         buttonProjectType.addActionListener(new java.awt.event.ActionListener() {
@@ -91,25 +237,42 @@ public class HomeGUI extends javax.swing.JFrame {
             }
         });
         getContentPane().add(buttonProjectType);
-        buttonProjectType.setBounds(10, 130, 190, 50);
+        buttonProjectType.setBounds(10, 170, 190, 50);
 
         desktop.setBackground(new java.awt.Color(240, 240, 240));
+
+        desktopHomeImg.setBackground(new java.awt.Color(240, 240, 240));
+
+        javax.swing.GroupLayout desktopHomeImgLayout = new javax.swing.GroupLayout(desktopHomeImg);
+        desktopHomeImg.setLayout(desktopHomeImgLayout);
+        desktopHomeImgLayout.setHorizontalGroup(
+            desktopHomeImgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1379, Short.MAX_VALUE)
+        );
+        desktopHomeImgLayout.setVerticalGroup(
+            desktopHomeImgLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 750, Short.MAX_VALUE)
+        );
+
+        desktop.setLayer(desktopHomeImg, javax.swing.JLayeredPane.DEFAULT_LAYER);
 
         javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1380, Short.MAX_VALUE)
+            .addGroup(desktopLayout.createSequentialGroup()
+                .addComponent(desktopHomeImg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 590, Short.MAX_VALUE)
+            .addComponent(desktopHomeImg)
         );
 
         getContentPane().add(desktop);
-        desktop.setBounds(220, 70, 1380, 590);
+        desktop.setBounds(210, 110, 1380, 750);
 
-        setSize(new java.awt.Dimension(1633, 734));
+        setSize(new java.awt.Dimension(1633, 939));
         setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
@@ -140,6 +303,79 @@ public class HomeGUI extends javax.swing.JFrame {
             Logger.getLogger(HomeGUI.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_buttonProjectTypeActionPerformed
+
+    private void formWindowOpened(java.awt.event.WindowEvent evt) {//GEN-FIRST:event_formWindowOpened
+       Home_img homeImg = new Home_img();
+        try {
+            this.desktopHomeImg.removeAll();
+            this.desktopHomeImg.repaint();
+            
+            this.desktopHomeImg.add(homeImg);
+            homeImg.setMaximum(true);
+            
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(HomeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        homeImg.show();
+    }//GEN-LAST:event_formWindowOpened
+
+    private void labelHomeMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHomeMouseClicked
+        // TODO add your handling code here:
+            this.desktopHomeImg.removeAll();
+            this.desktopHomeImg.repaint();
+
+        Home_img homeImg = new Home_img();
+        this.desktopHomeImg.add(homeImg);
+        
+        try {
+            homeImg.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            Logger.getLogger(HomeGUI.class.getName()).log(Level.SEVERE, null, ex);
+        }
+          homeImg.show(true);
+    }//GEN-LAST:event_labelHomeMouseClicked
+
+    private void labelHomeMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHomeMouseEntered
+        // TODO add your handling code here:
+        labelHome.setForeground(Color.DARK_GRAY);
+    }//GEN-LAST:event_labelHomeMouseEntered
+
+    private void labelHomeMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHomeMouseExited
+        // TODO add your handling code here:
+        labelHome.setForeground(Color.white);
+    }//GEN-LAST:event_labelHomeMouseExited
+
+    private void labelHomeMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHomeMousePressed
+        // TODO add your handling code here:
+        labelHome.setForeground(Color.white);
+    }//GEN-LAST:event_labelHomeMousePressed
+
+    private void labelHomeMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelHomeMouseReleased
+        // TODO add your handling code here:
+        labelHome.setForeground(Color.white);
+    }//GEN-LAST:event_labelHomeMouseReleased
+
+    private void labelAboutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelAboutMouseClicked
+        viewProfile profile = new viewProfile();
+        profile.setVisible(true);
+        
+    }//GEN-LAST:event_labelAboutMouseClicked
+
+    private void labelAboutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelAboutMouseEntered
+        labelAbout.setForeground(Color.DARK_GRAY);
+    }//GEN-LAST:event_labelAboutMouseEntered
+
+    private void labelAboutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelAboutMouseExited
+        labelAbout.setForeground(Color.white);
+    }//GEN-LAST:event_labelAboutMouseExited
+
+    private void labelAboutMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelAboutMousePressed
+        labelAbout.setForeground(Color.white);
+    }//GEN-LAST:event_labelAboutMousePressed
+
+    private void labelAboutMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_labelAboutMouseReleased
+        labelAbout.setForeground(Color.white);
+    }//GEN-LAST:event_labelAboutMouseReleased
 
     /**
      * @param args the command line arguments
@@ -177,10 +413,18 @@ public class HomeGUI extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JLabel DateLabel;
+    private javax.swing.JLabel TimeLabel;
     private javax.swing.JButton buttonProject;
     private javax.swing.JButton buttonProjectType;
     private javax.swing.JDesktopPane desktop;
+    private javax.swing.JDesktopPane desktopHomeImg;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel labelAbout;
+    public javax.swing.JLabel labelHome;
+    private javax.swing.JLabel username;
     // End of variables declaration//GEN-END:variables
 }

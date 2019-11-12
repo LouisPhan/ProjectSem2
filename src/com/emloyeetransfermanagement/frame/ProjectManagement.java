@@ -108,6 +108,84 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     public String getTableResult(){
         return test;
     }
+    
+    public void search(){
+        try {
+            String query = "select * from Project where ProjectName LIKE ?";
+            
+            pst = conn.prepareStatement(query);
+            pst.setString(1,"%" + txtSearch.getText() + "%");
+            
+            rs = pst.executeQuery();
+            tableProject.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+        
+        try {
+            String query = "select * from Project where ProjectName LIKE ?";
+            
+            pst = conn.prepareStatement(query);
+            pst.setString(1, "%" + txtSearch.getText() + "%");
+            
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                String t1 = rs.getString("ProjectID");
+                txtProjectID.setText(t1);
+                String t2 = rs.getString("ProjectName");
+                txtProjectName.setText(t2);
+                String t3 = rs.getString("StartDate");
+                txtStartDate.setText(t3);
+                String t4 = rs.getString("EndDate");
+                txtEndDate.setText(t4);
+                String t5 = rs.getString("RoomName");
+                txtRoomName.setText(t5);
+                String t6 = rs.getString("Status");
+                txtStatus.setText(t6);
+                String t7 = rs.getString("Coefficient");
+                txtCoefficient.setText(t7);
+                String t8 = rs.getString("ProjectTypeID");
+                txtProjectTypeID.setText(t8);
+            }
+
+        } catch (SQLException e) {
+            System.out.println(e);
+        }
+        
+        
+        try {
+            String query = "select * from Project where ProjectID = ?";
+            
+            pst = conn.prepareStatement(query);
+            pst.setString(1, txtSearch.getText());
+            
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                String t1 = rs.getString("ProjectID");
+                txtProjectID.setText(t1);
+                String t2 = rs.getString("ProjectName");
+                txtProjectName.setText(t2);
+                String t3 = rs.getString("StartDate");
+                txtStartDate.setText(t3);
+                String t4 = rs.getString("EndDate");
+                txtEndDate.setText(t4);
+                String t5 = rs.getString("RoomName");
+                txtRoomName.setText(t5);
+                String t6 = rs.getString("Status");
+                txtStatus.setText(t6);
+                String t7 = rs.getString("Coefficient");
+                txtCoefficient.setText(t7);
+                String t8 = rs.getString("ProjectTypeID");
+                txtProjectTypeID.setText(t8);
+            }
+        }catch (SQLException e) {
+            System.out.println(e);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -120,9 +198,12 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         filler1 = new javax.swing.Box.Filler(new java.awt.Dimension(0, 0), new java.awt.Dimension(0, 0), new java.awt.Dimension(32767, 32767));
         jPanel1 = new javax.swing.JPanel();
         jLabel2 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tableProject = new javax.swing.JTable();
+        tableProject = new javax.swing.JTable(){
+            public boolean isCellEditTable(int d, int c){
+                return false;
+            }
+        };
         jLabel6 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
@@ -141,8 +222,13 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         txtStatus = new javax.swing.JLabel();
         txtCoefficient = new javax.swing.JLabel();
         txtProjectTypeID = new javax.swing.JLabel();
+        jPanel3 = new javax.swing.JPanel();
+        jButton1 = new javax.swing.JButton();
         buttonDelete = new javax.swing.JButton();
         buttonModify = new javax.swing.JButton();
+        txtSearch = new javax.swing.JTextField();
+        buttonSearch = new javax.swing.JButton();
+        buttonReset = new javax.swing.JButton();
 
         setBackground(new java.awt.Color(255, 255, 255));
         setBorder(null);
@@ -188,13 +274,6 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 .addComponent(jLabel2)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
-
-        jButton1.setText("Add");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
-            }
-        });
 
         tableProject.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -311,13 +390,11 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel7, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtRoomName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(38, 38, 38)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addComponent(txtStatus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(26, 26, 26)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jLabel8)
+                    .addComponent(txtStatus, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 54, Short.MAX_VALUE)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel9, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtCoefficient, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -327,6 +404,16 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                     .addComponent(txtProjectTypeID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
+
+        jPanel3.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Option"));
+
+        jButton1.setText("Add");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         buttonDelete.setText("Delete");
         buttonDelete.addActionListener(new java.awt.event.ActionListener() {
@@ -342,6 +429,50 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
             }
         });
 
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(buttonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(buttonModify, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
+        );
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addContainerGap()
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(buttonModify, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+        );
+
+        txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtSearchKeyReleased(evt);
+            }
+        });
+
+        buttonSearch.setText("Search");
+        buttonSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonSearchActionPerformed(evt);
+            }
+        });
+
+        buttonReset.setText("Reset");
+        buttonReset.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                buttonResetActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -351,37 +482,46 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 .addGap(36, 36, 36)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(buttonDelete, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(buttonModify, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addContainerGap())
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 863, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                .addComponent(jLabel6)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel6)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(18, 18, 18)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(53, Short.MAX_VALUE))))))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(156, 156, 156)
+                .addComponent(buttonSearch)
+                .addGap(18, 18, 18)
+                .addComponent(txtSearch, javax.swing.GroupLayout.PREFERRED_SIZE, 428, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(buttonReset, javax.swing.GroupLayout.PREFERRED_SIZE, 80, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addGroup(layout.createSequentialGroup()
-                            .addGap(248, 248, 248)
-                            .addComponent(jLabel6))
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 25, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 50, Short.MAX_VALUE)
-                    .addComponent(buttonDelete, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(buttonModify, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(txtSearch)
+                    .addComponent(buttonReset, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                    .addComponent(buttonSearch, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 444, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel6)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -392,6 +532,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         AddProject_table addTable = new AddProject_table();
         addTable.setVisible(true);
         addTable.cleardata();
+        addTable.autoID();
     }//GEN-LAST:event_jButton1ActionPerformed
 
     private void tableProjectMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tableProjectMouseClicked
@@ -399,6 +540,17 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tableProjectMouseClicked
 
     private void buttonDeleteActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonDeleteActionPerformed
+        try {
+            if(txtStatus.getText().equalsIgnoreCase("Unfinished")){ 
+                JOptionPane.showMessageDialog(null, "This project is still working, you can't delete it!");
+                return;
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+        
         if(JOptionPane.showConfirmDialog(null, "Do you want to delete this, it can not be recovered?","",JOptionPane.YES_NO_OPTION) == JOptionPane.OK_OPTION){
         if(txtProjectID.getText().length() != 0){
         
@@ -417,7 +569,10 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         }else{
             JOptionPane.showMessageDialog(null, "Delete failed");
             
-        }}
+        }
+       }
+    
+        
         showRecord();
         clear();
         buttonDelete.setEnabled(false);
@@ -440,10 +595,102 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         buttonModify.setEnabled(false);
     }//GEN-LAST:event_buttonModifyActionPerformed
 
+    private void buttonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSearchActionPerformed
+        try {
+            String query = "select * from Project where ProjectName = ?";
+            
+            pst = conn.prepareStatement(query);
+            pst.setString(1, txtSearch.getText());
+            
+            rs = pst.executeQuery();
+            tableProject.setModel(DbUtils.resultSetToTableModel(rs));
+            
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+        try {
+            String query = "select * from Project where ProjectName = ?";
+            
+            pst = conn.prepareStatement(query);
+            pst.setString(1, txtSearch.getText());
+            
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                String t1 = rs.getString("ProjectID");
+                txtProjectID.setText(t1);
+                String t2 = rs.getString("ProjectName");
+                txtProjectName.setText(t2);
+                String t3 = rs.getString("StartDate");
+                txtStartDate.setText(t3);
+                String t4 = rs.getString("EndDate");
+                txtEndDate.setText(t4);
+                String t5 = rs.getString("RoomName");
+                txtRoomName.setText(t5);
+                String t6 = rs.getString("Status");
+                txtStatus.setText(t6);
+                String t7 = rs.getString("Coefficient");
+                txtCoefficient.setText(t7);
+                String t8 = rs.getString("ProjectTypeID");
+                txtProjectTypeID.setText(t8);
+            }
+        } catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+        try {
+            String query = "select * from Project where ProjectID = ?";
+            
+            pst = conn.prepareStatement(query);
+            pst.setString(1, txtSearch.getText());
+            
+            rs = pst.executeQuery();
+            
+            if(rs.next()){
+                String t1 = rs.getString("ProjectID");
+                txtProjectID.setText(t1);
+                String t2 = rs.getString("ProjectName");
+                txtProjectName.setText(t2);
+                String t3 = rs.getString("StartDate");
+                txtStartDate.setText(t3);
+                String t4 = rs.getString("EndDate");
+                txtEndDate.setText(t4);
+                String t5 = rs.getString("RoomName");
+                txtRoomName.setText(t5);
+                String t6 = rs.getString("Status");
+                txtStatus.setText(t6);
+                String t7 = rs.getString("Coefficient");
+                txtCoefficient.setText(t7);
+                String t8 = rs.getString("ProjectTypeID");
+                txtProjectTypeID.setText(t8);
+            }
+        }catch (Exception e) {
+            System.out.println(e);
+        }
+        
+        
+    }//GEN-LAST:event_buttonSearchActionPerformed
+
+    private void buttonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonResetActionPerformed
+        showRecord();
+        txtSearch.setText("");
+        clear();
+    }//GEN-LAST:event_buttonResetActionPerformed
+
+    private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
+        // TODO add your handling code here:
+        search();
+    }//GEN-LAST:event_txtSearchKeyReleased
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton buttonDelete;
     private javax.swing.JButton buttonModify;
+    private javax.swing.JButton buttonReset;
+    private javax.swing.JButton buttonSearch;
     private javax.swing.Box.Filler filler1;
     private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
@@ -458,6 +705,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel9;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JPanel jPanel3;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tableProject;
     private javax.swing.JLabel txtCoefficient;
@@ -466,6 +714,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     private javax.swing.JLabel txtProjectName;
     private javax.swing.JLabel txtProjectTypeID;
     private javax.swing.JLabel txtRoomName;
+    private javax.swing.JTextField txtSearch;
     private javax.swing.JLabel txtStartDate;
     private javax.swing.JLabel txtStatus;
     // End of variables declaration//GEN-END:variables

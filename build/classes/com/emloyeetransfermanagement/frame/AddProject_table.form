@@ -190,10 +190,19 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtProjectID">
+      <Properties>
+        <Property name="enabled" type="boolean" value="false"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtProjectIDActionPerformed"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JTextField" name="txtProjectName">
     </Component>
     <Component class="javax.swing.JTextField" name="txtCoeffection">
+      <Events>
+        <EventHandler event="keyTyped" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txtCoeffectionKeyTyped"/>
+      </Events>
     </Component>
     <Component class="javax.swing.JComboBox" name="roomName">
       <Properties>

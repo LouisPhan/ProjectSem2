@@ -168,4 +168,253 @@ create modify button -> change varibale name
 -> pst = conn.prepareStatment(query);
 	pst.excute();
 	Show mess
+===============================================
+
+
+====================Video #23==================
+in ProjectManagement
+-> static String mark;
+-> public String mark(){
+	return mark;
+}
+-> set Add action (this.mark = "add";)
+-> set Modify action (this.mark = "update";)
+
+in addProject
+public void hideButton(){
+	ProjectManagement mark = new ProjectManagement();
+	String marked = mark.mark();
+
+	if(marked == "update"){
+		buttonModify.setVisible(true);
+	}else{
+		buttonModify.setVisible(false);
+	}
+
+	if(marked == "add"){
+		buttonAdd.setVisible(true);
+	}
+	else{
+		buttonAdd.setVisible(false);
+		}	
+}
+
+-> set JFrame action Window -> windowOpened 
+-> set the hideButton in side action Window
+=============================================
+
+====================Video #28==================
+->in update change t7 to status
+-> in recuper
+String vbn = t7;
+if(vbn.equals("Finish")){
+	rbFinish.setSelected(true);
+	status = "Finish";
+}else if (vbn.equals("Unfinish")){
+	rbUnfinish.setSelected(true);
+	status = "Unfinish";
+}
+===============================================
+
+====================Video #25==================
+create a filde and a button for research
+set action 
+ ->	in a try-catch block
+ 	String query = "select * from Project where ProjectName = ?";
+
+ 	pst = conn.prepareStatment(query);
+ 	pst.setString(1, txtSearch.getText());
+ 	rs = ps.executeQuery();
+ 	Table.setModel(DbUtils.resultSetTableModel(rs));
+===============================================
+
+====================Video #26==================
+-> in a try-catch block 
+String query = "select * from Project where ProjectName = ?";
+
+ 	pst = conn.prepareStatment(query);
+ 	pst.setString(1, txtSearch.getText());
+ 	rs = ps.executeQuery();
+ 	if(rs.next()){
+ 		String t1 = rs.getString("ProjectID")
+ 		txtProjectID.setText(t1);
+ 		-> same with orther
+ 	}
+-> in an orther try-catch block 
+	String query = "select * from Project where ProjectID = ?";
+
+ 	pst = conn.prepareStatment(query);
+ 	pst.setString(1, txtSearch.getText());
+ 	rs = ps.executeQuery();
+ 	if(rs.next()){
+ 		String t1 = rs.getString("ProjectID")
+ 		txtProjectID.setText(t1);
+ 		-> same with orther
+ 	}
+
+-> create button reset -> set action
+-> showRecord();
+-> txtSearch.setText("");
+-> clear();
+=============================================== 	
+====================Video #27==================
+txtSearch -> set Event -> key Released 
+-> public void search()
+{
+	try
+	{
+	String query = "select * from Project where ProjectName LIKE ?";
+
+ 	pst = conn.prepareStatment(query);
+ 	pst.setString(1, "%" + txtSearch.getText()+ "%");
+ 	rs = ps.executeQuery();
+ 	Table.setModel(DbUtils.resultSetTableModel(rs));	
+	}
+	catch(){};
+
+	try{
+	String query = "select * from Project where ProjectName LIKE ?";
+
+ 	pst = conn.prepareStatment(query);
+ 	pst.setString(1, "%" + txtSearch.getText()+ "%");
+ 	rs = ps.executeQuery();
+ 	if(rs.next()){
+ 		String t1 = rs.getString("ProjectID")
+ 		txtProjectID.setText(t1);
+ 		-> same with orther
+ 	}
+ 	}
+
+ 	try{
+	String query = "select * from Project where ProjectID = ?";
+
+ 	pst = conn.prepareStatment(query);
+ 	pst.setString(1, txtSearch.getText());
+ 	rs = ps.executeQuery();
+ 	if(rs.next()){
+ 		String t1 = rs.getString("ProjectID")
+ 		txtProjectID.setText(t1);
+ 		-> same with orther
+ 		}
+	}
+
 	
+}
+================================================
+	
+====================Video #39===================
+table -> custom code -> custom creation
+-> {
+	public boolean isCellEditTable(int d, int c){
+		return false;
+	}
+};
+================================================
+
+====================Video #39===================
+JInternalFrame -> event -> JInternalFrame -> Opened
+-> this.Table.getTableHeader().setResizingAllowed(false);
+================================================
+
+
+====================Video #41===================
+-> set a label -> set variable's name: labelTime
+-> public void dateCurrent(){
+	Thread clock = new Thread(){
+	public void run(){
+		for(;;){
+			Calendar cal = new GregorianCalendar();
+
+			int seconds = cal.get(Calendar.SECOND);
+
+			int minute = cal.get(Calendar.MINUTE);
+			int hour = cal.get(Calendar.HOUR);
+
+			labelTime.setText("hour: " +hour+ ":" + (minue) + ":" + seconds);
+
+			try{
+				sleep(1000);
+
+			}
+			catch(InterruptedException ex){
+				Logger.getLogger(Calendar.class.getName()).log(Level.SEVERE,null,ex);
+			}
+		}
+		};
+	}
+clock.start();
+}
+================================================
+
+
+====================Video #41===================
+-> set a label -> change variable name: labelDate
+-> set color
+-> add code to dateCurrent(){
+	int month = cal.get(Calendar.MONTH);
+	int year = cal.get(Calendar.YEAR);
+	int month = cal.get(Calendar.MONTH);
+	int day = cal.get(Calendar.DAY_OF_MONTH);
+
+	labelDate.setText("Date:" + day + "/" + (month+1) + "/" + year);
+}
+================================================
+
+====================Video #44===================
+int AM_PM = cal.get(Calendar.AM_PM);
+String time;
+if(AM_PM == 1){
+	time="PM";
+}else{
+	time="AM";
+}
+
+labelTime.setText("hour: " +hour+ ":" + (minue) + ":" + seconds + " " + time);
+
+================================================
+
+
+===Videos #47=== -> set number only
+===Videos #48=== -> set age enable to unable
+
+====================Video #49===================
+-> set label Home
+-> open JFram event -> windowOpened
+-> {
+	this.deskHomeImg.removeAll();
+	this.deskHomeImg.repaint();
+
+	Home_img homeImg = Home_img();
+	this.deskHomeImg.add(homeImg);
+
+	try{
+		homeImg.setMaximum(true);
+	}catch(PropertyVetoException ex){
+		....
+	}
+	homeImg.show();
+}
+-> copy the code
+-> set event in the label Home -> mouseClick
+-> past the code
+
+->set event MouseEntered 
+	labelHome.setForeground(Color.red);
+->set event MouseExited 
+	labelHome.setForeground(Color.white);
+->set event MousePressed
+	labelHome.setForeground(Color.white);
+->set event MouseReleased 
+	labelHome.setForeground(Color.white);
+================================================
+
+
+
+===========Number accepted only=================
+-> set event KeyTyped in the filed which one to set
+char c = evt.getKeyChar();
+if(!(Character.isDigital(c) || (c == KeyEvent.VK_BACK_SPACE) ||c==KeyEvent.VK_DELETE )){
+	getToolKit().beep();
+	evt.consume();	
+
+}
