@@ -6,25 +6,23 @@
 package com.emloyeetransfermanagement.frame;
 
 import java.awt.HeadlessException;
-import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.Date;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.text.SimpleDateFormat;
+import java.time.LocalDate;
 import java.util.Calendar;
 import java.util.Locale;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import static javax.swing.UIManager.getString;
-
 /**
  *
  * @author MyPC
  */
-public class AddProject_table extends javax.swing.JFrame {
+public final class AddProject_table extends javax.swing.JFrame {
     Connection conn = null;
     DBConnection connection = new DBConnection();
     PreparedStatement pst = null;
@@ -36,8 +34,24 @@ public class AddProject_table extends javax.swing.JFrame {
     public AddProject_table() {
         initComponents();
         conn = connection.dbConncetor();
+        FillCombox();
         Recuper();
+        
     }
+    
+
+    public boolean checkDate(){
+            SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
+            
+            String startDate  = dateFormat.format(calendarSD.getDate());
+            String endDate = dateFormat.format(calendarED.getDate());
+            
+            LocalDate date1 = LocalDate.parse(startDate);
+            LocalDate date2 = LocalDate.parse(endDate);
+        
+     return date1.isBefore(date2);
+    }
+    
     
     public void hideButton(){
         ProjectManagement mark = new ProjectManagement();
@@ -70,17 +84,36 @@ public class AddProject_table extends javax.swing.JFrame {
             }
                     
             } catch (SQLException ex) {
+            System.out.println(ex);
             Logger.getLogger(AddProject_table.class.getName()).log(Level.SEVERE, null, ex);
         }
     }
+   
+    public void FillCombox(){
+        try {
+            String query = "select * from ProjectType";
+            pst = conn.prepareStatement(query);
+            rs = pst.executeQuery();
+            
+            while(rs.next()){
+                String projectTypeID = rs.getString("ProjectTypeID");
+                projectTypeCombox.addItem(projectTypeID);
+            }
+            
+        } catch (SQLException e) {
+            System.out.println(e);
+            JOptionPane.showMessageDialog(null, "Error in combox");
+        }
+        
+    }
+    
     
     public void Recuper(){
         ProjectManagement modify = new ProjectManagement();
-        
-        
+       
         try {
             String test2 = modify.getTableResult();
-            String query = "select * from Project where ProjectID = '"+test2+"'" ;
+            String query = "select ProjectID, ProjectName, StartDate, EndDate, RoomName, Coefficient, Status, ProjectTypeID from Project where ProjectID = '"+test2+"'" ;
             
             pst = conn.prepareStatement(query);
             rs = pst.executeQuery();
@@ -100,20 +133,22 @@ public class AddProject_table extends javax.swing.JFrame {
                 txtCoeffection.setText(t6);
                 String t7 = rs.getString("Status");
                 String vbn = t7;
-                if(vbn.equals("Finished")){
+                
+                if(vbn.equals("finished")){
                     rbFinished.setSelected(true);
-                    status = "Finished";
+                    status = "finished";
                 }
-                else if(vbn.equals("Unfinished")){
+                else if(vbn.equals("unfinished")){
                     rbUnfinished.setSelected(true);
-                    status = "Unfinished";
+                    status = "unfinished";
                 }
                 
-                String t8 = rs.getString("ProjectTypeID");
-                projectType.setSelectedItem(t8);
+              String t8 = rs.getNString("ProjectTypeID");
+              projectTypeCombox.setSelectedItem(t8);
+                
             }
             
-        } catch (Exception e) {
+        } catch (HeadlessException | SQLException e) {
             System.out.println(e);
         } 
     }
@@ -125,7 +160,7 @@ public class AddProject_table extends javax.swing.JFrame {
         calendarED.setDate(null);
         roomName.setSelectedIndex(0);
         txtCoeffection.setText("");
-        projectType.setSelectedIndex(0);
+        projectTypeCombox.setSelectedIndex(0);
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -148,7 +183,7 @@ public class AddProject_table extends javax.swing.JFrame {
         txtProjectName = new javax.swing.JTextField();
         txtCoeffection = new javax.swing.JTextField();
         roomName = new javax.swing.JComboBox<>();
-        projectType = new javax.swing.JComboBox<>();
+        projectTypeCombox = new javax.swing.JComboBox<>();
         jLabel8 = new javax.swing.JLabel();
         rbFinished = new javax.swing.JRadioButton();
         rbUnfinished = new javax.swing.JRadioButton();
@@ -201,10 +236,10 @@ public class AddProject_table extends javax.swing.JFrame {
             }
         });
 
-        projectType.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Select", "PJT001", "PJT002" }));
-        projectType.addActionListener(new java.awt.event.ActionListener() {
+        projectTypeCombox.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "select" }));
+        projectTypeCombox.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                projectTypeActionPerformed(evt);
+                projectTypeComboxActionPerformed(evt);
             }
         });
 
@@ -288,7 +323,7 @@ public class AddProject_table extends javax.swing.JFrame {
                         .addContainerGap()
                         .addComponent(jLabel7)
                         .addGap(18, 18, 18)
-                        .addComponent(projectType, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(projectTypeCombox, javax.swing.GroupLayout.PREFERRED_SIZE, 173, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(22, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
@@ -333,7 +368,7 @@ public class AddProject_table extends javax.swing.JFrame {
                 .addGap(28, 28, 28)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(projectType, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(projectTypeCombox, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 20, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(buttonUpdate, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -348,9 +383,9 @@ public class AddProject_table extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_roomNameActionPerformed
 
-    private void projectTypeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectTypeActionPerformed
+    private void projectTypeComboxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_projectTypeComboxActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_projectTypeActionPerformed
+    }//GEN-LAST:event_projectTypeComboxActionPerformed
 
     private void buttonSaveProjectActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSaveProjectActionPerformed
         // TODO add your handling code here
@@ -359,7 +394,7 @@ public class AddProject_table extends javax.swing.JFrame {
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
         
         try {
-            if(txtProjectName.getText().equalsIgnoreCase("") || txtCoeffection.getText().equalsIgnoreCase("") || StatusGroup.isSelected(null) || roomName.getSelectedItem().equals("Select") || projectType.getSelectedItem().equals("Select")){
+            if(txtProjectName.getText().equalsIgnoreCase("") || txtCoeffection.getText().equalsIgnoreCase("") || StatusGroup.isSelected(null) || roomName.getSelectedItem().equals("Select") || projectTypeCombox.getSelectedItem().equals("Select")){
                 JOptionPane.showMessageDialog(null, "Some fields are empty or not selcted");
                 return;
             }
@@ -375,15 +410,22 @@ public class AddProject_table extends javax.swing.JFrame {
         pst.setString(2, txtProjectName.getText());
         pst.setString(3, dateFormat.format(calendarSD.getDate()));
         pst.setString(4, dateFormat.format(calendarED.getDate()));
+        
+            if(!checkDate()){
+                JOptionPane.showMessageDialog(null, "Error in the date, please check again");
+                return;
+            }
+        
         pst.setString(5, (String) roomName.getSelectedItem());
         pst.setString(6, status);        
         pst.setString(7, txtCoeffection.getText());
-        pst.setString(8, (String) projectType.getSelectedItem());
+        pst.setString(8, (String) projectTypeCombox.getSelectedItem());
         
         pst.execute();
         JOptionPane.showMessageDialog(null, "Saved");
 
-        } catch (SQLException e) {
+        }
+        catch (SQLException e) {
             JOptionPane.showMessageDialog(null, e);
         } finally{
             try {
@@ -394,17 +436,21 @@ public class AddProject_table extends javax.swing.JFrame {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
+        
+       
+        
+        
       show.showRecord();
       
       
     }//GEN-LAST:event_buttonSaveProjectActionPerformed
 
     private void rbFinishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbFinishedActionPerformed
-        status = "Finished";
+        status = "finished";
     }//GEN-LAST:event_rbFinishedActionPerformed
 
     private void rbUnfinishedActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_rbUnfinishedActionPerformed
-        status = "Unfinished";
+        status = "unfinished";
     }//GEN-LAST:event_rbUnfinishedActionPerformed
 
     private void buttonUpdateActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonUpdateActionPerformed
@@ -413,10 +459,15 @@ public class AddProject_table extends javax.swing.JFrame {
         String t2 = txtProjectName.getText();
         String t3 = dateFormat.format(calendarSD.getDate());
         String t4 = dateFormat.format(calendarED.getDate());
+        
+        if(!checkDate()){
+            JOptionPane.showMessageDialog(null, "Error in date, please check again!");
+            return;
+        }
+        
         String t5 = (String) roomName.getSelectedItem();
         String t6 = txtCoeffection.getText();
-//        String t7 = StatusGroup.getSelection().toString();
-        String t8 = (String) projectType.getSelectedItem();
+        String t8 = (String) projectTypeCombox.getSelectedItem();
         
         String query = "update Project set ProjectName = '"+t2+"', StartDate = '"+t3+"', EndDate = '"+t4+"', RoomName = '"+t5+"', Status = '"+status+"', Coefficient = '"+t6+"', ProjectTypeID = '"+t8+"' where ProjectID = '"+t1+"' ";
         try {
@@ -429,11 +480,12 @@ public class AddProject_table extends javax.swing.JFrame {
             try {
                 pst.close();
                 dispose();
-            } catch (Exception e) {
+            } catch (SQLException e) {
                 JOptionPane.showMessageDialog(null, e);
             }
         }
-        
+    ProjectManagement show = new ProjectManagement();
+    show.showRecord();
         
     }//GEN-LAST:event_buttonUpdateActionPerformed
 
@@ -503,7 +555,7 @@ public class AddProject_table extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JLabel jLabel9;
-    private javax.swing.JComboBox<String> projectType;
+    private javax.swing.JComboBox<String> projectTypeCombox;
     private javax.swing.JRadioButton rbFinished;
     private javax.swing.JRadioButton rbUnfinished;
     private javax.swing.JComboBox<String> roomName;

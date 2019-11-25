@@ -11,6 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
 
 /**
@@ -30,6 +31,7 @@ public class LoginFrame extends javax.swing.JFrame {
     public LoginFrame() {
         initComponents();
         conn = connection.dbConncetor();
+        this.setIconImage(new ImageIcon(getClass().getResource("heading_icon2.png")).getImage());
     }
 
     /**
@@ -182,7 +184,7 @@ public class LoginFrame extends javax.swing.JFrame {
   
         
         if(username.equals("") || password.equals("") || option.equals("Select")){
-            JOptionPane.showMessageDialog(null, "Some fields are empty!");
+            JOptionPane.showMessageDialog(null, "Your username/password are empty or You forgot select your role");
         }
         else{
             try {

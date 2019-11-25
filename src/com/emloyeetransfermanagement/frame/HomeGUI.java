@@ -12,6 +12,7 @@ import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.ImageIcon;
+import javax.swing.JOptionPane;
 
 /**
  *
@@ -97,6 +98,7 @@ public class HomeGUI extends javax.swing.JFrame {
         TimeLabel = new javax.swing.JLabel();
         labelHome = new javax.swing.JLabel();
         labelAbout = new javax.swing.JLabel();
+        Logout = new javax.swing.JLabel();
         buttonProject = new javax.swing.JButton();
         buttonProjectType = new javax.swing.JButton();
         desktop = new javax.swing.JDesktopPane();
@@ -104,6 +106,7 @@ public class HomeGUI extends javax.swing.JFrame {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         setMinimumSize(new java.awt.Dimension(1024, 380));
+        setResizable(false);
         addWindowListener(new java.awt.event.WindowAdapter() {
             public void windowOpened(java.awt.event.WindowEvent evt) {
                 formWindowOpened(evt);
@@ -198,6 +201,28 @@ public class HomeGUI extends javax.swing.JFrame {
             }
         });
 
+        Logout.setFont(new java.awt.Font("Calibri", 1, 18)); // NOI18N
+        Logout.setForeground(java.awt.Color.red);
+        Logout.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        Logout.setText("Logout");
+        Logout.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                LogoutMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                LogoutMouseEntered(evt);
+            }
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                LogoutMouseExited(evt);
+            }
+            public void mousePressed(java.awt.event.MouseEvent evt) {
+                LogoutMousePressed(evt);
+            }
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                LogoutMouseReleased(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -207,15 +232,18 @@ public class HomeGUI extends javax.swing.JFrame {
                 .addComponent(labelHome, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(labelAbout, javax.swing.GroupLayout.PREFERRED_SIZE, 56, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1309, Short.MAX_VALUE)
+                .addGap(28, 28, 28)
+                .addComponent(Logout, javax.swing.GroupLayout.PREFERRED_SIZE, 64, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 1217, Short.MAX_VALUE)
                 .addComponent(TimeLabel, javax.swing.GroupLayout.PREFERRED_SIZE, 155, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(TimeLabel, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
-            .addComponent(labelAbout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addComponent(labelHome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(Logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(labelAbout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         getContentPane().add(jPanel2);
@@ -377,6 +405,29 @@ public class HomeGUI extends javax.swing.JFrame {
         labelAbout.setForeground(Color.white);
     }//GEN-LAST:event_labelAboutMouseReleased
 
+    private void LogoutMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMouseClicked
+        this.dispose();
+        LoginFrame login = new LoginFrame();
+        login.setVisible(true);
+        
+    }//GEN-LAST:event_LogoutMouseClicked
+
+    private void LogoutMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMouseEntered
+        Logout.setForeground(Color.white);
+    }//GEN-LAST:event_LogoutMouseEntered
+
+    private void LogoutMouseExited(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMouseExited
+        Logout.setForeground(Color.red);       
+    }//GEN-LAST:event_LogoutMouseExited
+
+    private void LogoutMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMousePressed
+        Logout.setForeground(Color.red);
+    }//GEN-LAST:event_LogoutMousePressed
+
+    private void LogoutMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_LogoutMouseReleased
+        Logout.setForeground(Color.red);
+    }//GEN-LAST:event_LogoutMouseReleased
+
     /**
      * @param args the command line arguments
      */
@@ -414,6 +465,7 @@ public class HomeGUI extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel DateLabel;
+    private javax.swing.JLabel Logout;
     private javax.swing.JLabel TimeLabel;
     private javax.swing.JButton buttonProject;
     private javax.swing.JButton buttonProjectType;

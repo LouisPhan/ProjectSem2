@@ -13,7 +13,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.JRootPane;
+import javax.swing.RowFilter;
 import javax.swing.plaf.basic.BasicInternalFrameUI;
+import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import net.proteanit.sql.DbUtils;
 
 /**
@@ -51,7 +54,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     }
     
     public void showRecord(){
-        String query = "select * from project";
+        String query = "select ProjectID, ProjectName, StartDate, EndDate, RoomName, Status, Coefficient, ProjectTypeName from Project p, ProjectType pt where p.ProjectTypeID = pt.ProjectTypeID";
         try {
             pst = conn.prepareStatement(query);
             rs = pst.executeQuery();
@@ -68,7 +71,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         txtEndDate.setText("");
         txtRoomName.setText("");
         txtStatus.setText("");
-        txtProjectTypeID.setText("");
+        txtProjectTypeName.setText("");
         txtCoefficient.setText("");  
     }
     
@@ -79,7 +82,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
             int row = tableProject.getSelectedRow();
             ProjectManagement.test =(tableProject.getModel().getValueAt(row, 0).toString());
             
-            String query = "select * from Project where ProjectID ='"+test+"'";
+            String query = "select ProjectID, ProjectName, StartDate, EndDate, RoomName, Status, Coefficient, ProjectTypeName from Project p, ProjectType pt where p.ProjectTypeID = pt.ProjectTypeID and ProjectID ='"+test+"'";
             pst = conn.prepareStatement(query);
             rs = pst.executeQuery();
             
@@ -98,8 +101,8 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 txtStatus.setText(t6);
                 String t7 = rs.getString("Coefficient");
                 txtCoefficient.setText(t7);
-                String t8 = rs.getString("ProjectTypeID");
-                txtProjectTypeID.setText(t8);
+                String t8 = rs.getString("ProjectTypeName");
+                txtProjectTypeName.setText(t8);
             }
         } catch (SQLException ex) {
             Logger.getLogger(ProjectManagement.class.getName()).log(Level.SEVERE, null, ex);
@@ -109,23 +112,29 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         return test;
     }
     
+//Search feature
     public void search(){
+        
+        
+           
         try {
-            String query = "select * from Project where ProjectName LIKE ?";
+            String query = "select ProjectID, ProjectName, StartDate, EndDate, RoomName, Status, Coefficient, ProjectTypeName from Project p, ProjectType pt where p.ProjectTypeID = pt.ProjectTypeID and (ProjectName like ? or Status like ?)";
             
             pst = conn.prepareStatement(query);
             pst.setString(1,"%" + txtSearch.getText() + "%");
+            pst.setString(2,"%" + txtSearch.getText() + "%");
+//            pst.setString(3,"%" + txtSearch.getText() + "%");
             
+                       
             rs = pst.executeQuery();
             tableProject.setModel(DbUtils.resultSetToTableModel(rs));
             
         } catch (SQLException e) {
             System.out.println(e);
-        }
-        
+        }        
         
         try {
-            String query = "select * from Project where ProjectName LIKE ?";
+            String query = "select ProjectID, ProjectName, StartDate, EndDate, RoomName, Status, Coefficient, ProjectTypeName from Project p, ProjectType pt where p.ProjectTypeID = pt.ProjectTypeID and ProjectName LIKE ?";
             
             pst = conn.prepareStatement(query);
             pst.setString(1, "%" + txtSearch.getText() + "%");
@@ -147,8 +156,8 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 txtStatus.setText(t6);
                 String t7 = rs.getString("Coefficient");
                 txtCoefficient.setText(t7);
-                String t8 = rs.getString("ProjectTypeID");
-                txtProjectTypeID.setText(t8);
+                String t8 = rs.getString("ProjectTypeName");
+                txtProjectTypeName.setText(t8);
             }
 
         } catch (SQLException e) {
@@ -157,7 +166,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         
         
         try {
-            String query = "select * from Project where ProjectID = ?";
+            String query = "select ProjectID, ProjectName, StartDate, EndDate, RoomName, Status, Coefficient, ProjectTypeName from Project p, ProjectType pt where p.ProjectTypeID = pt.ProjectTypeID and ProjectID = ?";
             
             pst = conn.prepareStatement(query);
             pst.setString(1, txtSearch.getText());
@@ -179,13 +188,15 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 txtStatus.setText(t6);
                 String t7 = rs.getString("Coefficient");
                 txtCoefficient.setText(t7);
-                String t8 = rs.getString("ProjectTypeID");
-                txtProjectTypeID.setText(t8);
+                String t8 = rs.getString("ProjectTypeName");
+                txtProjectTypeName.setText(t8);
             }
         }catch (SQLException e) {
             System.out.println(e);
         }
     }
+    
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -221,7 +232,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
         txtRoomName = new javax.swing.JLabel();
         txtStatus = new javax.swing.JLabel();
         txtCoefficient = new javax.swing.JLabel();
-        txtProjectTypeID = new javax.swing.JLabel();
+        txtProjectTypeName = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jButton1 = new javax.swing.JButton();
         buttonDelete = new javax.swing.JButton();
@@ -304,7 +315,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
 
         jLabel3.setText("Project Name:");
 
-        jLabel10.setText("Project Type ID: ");
+        jLabel10.setText("Project Type Name: ");
 
         jLabel8.setText("Status:");
 
@@ -336,7 +347,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
 
         txtCoefficient.setForeground(new java.awt.Color(0, 102, 204));
 
-        txtProjectTypeID.setForeground(new java.awt.Color(0, 102, 204));
+        txtProjectTypeName.setForeground(new java.awt.Color(0, 102, 204));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -356,7 +367,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 .addGap(14, 14, 14)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(txtProjectTypeID, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
+                        .addComponent(txtProjectTypeName, javax.swing.GroupLayout.DEFAULT_SIZE, 254, Short.MAX_VALUE)
                         .addGap(14, 14, 14))
                     .addComponent(txtCoefficient, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(txtStatus, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -401,12 +412,12 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 .addGap(36, 36, 36)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                     .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(txtProjectTypeID, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(txtProjectTypeName, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
 
         jPanel3.setBackground(new java.awt.Color(255, 255, 255));
-        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Option"));
+        jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder("Options"));
 
         jButton1.setText("Add");
         jButton1.addActionListener(new java.awt.event.ActionListener() {
@@ -453,6 +464,11 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 .addContainerGap())
         );
 
+        txtSearch.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txtSearchActionPerformed(evt);
+            }
+        });
         txtSearch.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyReleased(java.awt.event.KeyEvent evt) {
                 txtSearchKeyReleased(evt);
@@ -494,7 +510,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(18, 18, 18)
                                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addContainerGap(53, Short.MAX_VALUE))))))
+                                .addContainerGap(32, Short.MAX_VALUE))))))
             .addGroup(layout.createSequentialGroup()
                 .addGap(156, 156, 156)
                 .addComponent(buttonSearch)
@@ -597,24 +613,24 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
 
     private void buttonSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonSearchActionPerformed
         try {
-            String query = "select * from Project where ProjectName = ?";
+            String query = "select * from Project where ProjectName LIKE ?";
             
             pst = conn.prepareStatement(query);
-            pst.setString(1, txtSearch.getText());
+            pst.setString(1,"%" + txtSearch.getText() + "%");
             
             rs = pst.executeQuery();
             tableProject.setModel(DbUtils.resultSetToTableModel(rs));
             
-        } catch (Exception e) {
+        } catch (SQLException e) {
             System.out.println(e);
         }
         
         
         try {
-            String query = "select * from Project where ProjectName = ?";
+            String query = "select * from Project where ProjectName LIKE ?";
             
             pst = conn.prepareStatement(query);
-            pst.setString(1, txtSearch.getText());
+            pst.setString(1, "%" + txtSearch.getText() + "%");
             
             rs = pst.executeQuery();
             
@@ -634,9 +650,10 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 String t7 = rs.getString("Coefficient");
                 txtCoefficient.setText(t7);
                 String t8 = rs.getString("ProjectTypeID");
-                txtProjectTypeID.setText(t8);
+                txtProjectTypeName.setText(t8);
             }
-        } catch (Exception e) {
+
+        } catch (SQLException e) {
             System.out.println(e);
         }
         
@@ -665,13 +682,11 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
                 String t7 = rs.getString("Coefficient");
                 txtCoefficient.setText(t7);
                 String t8 = rs.getString("ProjectTypeID");
-                txtProjectTypeID.setText(t8);
+                txtProjectTypeName.setText(t8);
             }
-        }catch (Exception e) {
+        }catch (SQLException e) {
             System.out.println(e);
         }
-        
-        
     }//GEN-LAST:event_buttonSearchActionPerformed
 
     private void buttonResetActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_buttonResetActionPerformed
@@ -682,8 +697,18 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
 
     private void txtSearchKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtSearchKeyReleased
         // TODO add your handling code here:
-        search();
+        //search();
+        
+        DefaultTableModel model = (DefaultTableModel)tableProject.getModel();
+        TableRowSorter<DefaultTableModel> tr = new TableRowSorter<DefaultTableModel>(model);
+        tableProject.setRowSorter(tr);
+        tr.setRowFilter(RowFilter.regexFilter(txtSearch.getText().trim()));
+        
     }//GEN-LAST:event_txtSearchKeyReleased
+
+    private void txtSearchActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtSearchActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txtSearchActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -712,7 +737,7 @@ public class ProjectManagement extends javax.swing.JInternalFrame {
     private javax.swing.JLabel txtEndDate;
     private javax.swing.JLabel txtProjectID;
     private javax.swing.JLabel txtProjectName;
-    private javax.swing.JLabel txtProjectTypeID;
+    private javax.swing.JLabel txtProjectTypeName;
     private javax.swing.JLabel txtRoomName;
     private javax.swing.JTextField txtSearch;
     private javax.swing.JLabel txtStartDate;

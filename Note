@@ -1,0 +1,15 @@
+Note
+
+set in login button
+-> get String username;
+
+-> main.username(user);
+
+set in main page 
+void username(String user){
+	label.setText(user);
+}
+
+
+
+

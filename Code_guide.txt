@@ -413,7 +413,7 @@ labelTime.setText("hour: " +hour+ ":" + (minue) + ":" + seconds + " " + time);
 ===========Number accepted only=================
 -> set event KeyTyped in the filed which one to set
 char c = evt.getKeyChar();
-if(!(Character.isDigital(c) || (c == KeyEvent.VK_BACK_SPACE) ||c==KeyEvent.VK_DELETE )){
+if(Character.isLetter(c)&&!evt.isAltDown()){
 	getToolKit().beep();
 	evt.consume();	
 
